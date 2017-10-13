@@ -1,15 +1,17 @@
 import scrapy
-
+import re
 
 class TodaySpider(scrapy.Spider):
     name = "today"
 
     start_urls = [
-        'http://www.todayonline.com/singapore'
+        'http://www.todayonline.com/singapore?page=1'
     ]
 
     def parse(self, response):
         page = response.url.split("/")[-1]
+        if "=" in page:
+            page = page.split("=")[-1]
         filename = 'today_html/sgnews-%s.html' % page
         with open(filename, 'wb') as f:
             f.write(response.body)
